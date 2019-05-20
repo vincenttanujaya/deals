@@ -1,15 +1,24 @@
 package com.deals.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.deals.api.exception.ResourceNotFoundException;
 import com.deals.api.model.Deals;
@@ -17,11 +26,10 @@ import com.deals.api.model.DealsRecord;
 import com.deals.api.repository.DealsRecordRepository;
 import com.deals.api.repository.DealsRepository;
 import com.deals.api.services.SecurityService;
-
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
-public class DealsController {
+@RequestMapping("/apiauth")
+public class DealsAuthController {
 	@Autowired
 	DealsRepository dealsRepository;
 	@Autowired
@@ -35,7 +43,6 @@ public class DealsController {
 	    return "Response!";
 	}
 	//Order Check Valid
-	@GetMapping("/checkdeals")
 	public Map<String, Object> checkValid(@RequestHeader int id_deals,@RequestHeader int id_customer,@RequestHeader int total_harga,@RequestHeader int ongkir) {
 	    Deals halo = dealsRepository.checkDeals(id_deals, id_customer);
 	    Map<String, Object> map = new LinkedHashMap<>();
@@ -130,8 +137,9 @@ public class DealsController {
 	
 	// DEALS SECTION
 	@GetMapping("/deals")
-	public List<Deals> getAllDeals(@RequestParam float latitude, @RequestParam float longitude) {
-//		String subject = securityService.validate(token);
+	public List<Deals> getAllDeals() {
+		float latitude = 0;
+		float longitude = 0;
 	    return dealsRepository.findAvailableDeals(latitude,longitude);
 	}
 	
